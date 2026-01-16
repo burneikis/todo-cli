@@ -60,7 +60,7 @@ Usage:
 """
     print(help_text)
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) < 2:
         print_help()
         sys.exit(1)
@@ -93,4 +93,7 @@ if __name__ == "__main__":
         print("Unknown command.")
         print_help()
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
  
