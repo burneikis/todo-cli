@@ -73,6 +73,27 @@ def top_todo(index):
 
     save_todos(todos)
 
+def bottom_todo(index):
+    index -= 1
+
+    todos = load_todos()
+
+    todo = todos.pop(index)
+    todos.append(todo)
+
+    save_todos(todos)
+
+def move_todo(index, position):
+    index -= 1
+    position -= 1
+
+    todos = load_todos()
+
+    todo = todos.pop(index)
+    todos.insert(position, todo)
+
+    save_todos(todos)
+
 def print_help():
     help_text = """
 Usage:
@@ -83,6 +104,8 @@ Usage:
     todo clear                     - Clear all todos
     todo swap X Y                  - Swap todos at index X and Y
     todo top INDEX                 - Move todo at INDEX to the top
+    todo bot INDEX                 - Move todo at INDEX to the bottom
+    todo move INDEX POSITION       - Move todo at INDEX to POSITION
 """
     print(help_text)
 
@@ -135,6 +158,27 @@ def main():
             top_todo(index)
         except ValueError:
             print("Index must be a number.")
+            sys.exit(1)
+    elif command == "bot":
+        if len(sys.argv) < 3:
+            print("Please provide the index of the todo to move to the bottom")
+            sys.exit(1)
+        try:
+            index = int(sys.argv[2])
+            bottom_todo(index)
+        except ValueError:
+            print("Index must be a number.")
+            sys.exit(1)
+    elif command == "move":
+        if len(sys.argv) < 4:
+            print("Please provide the index of the todo and the new position")
+            sys.exit(1)
+        try:
+            index = int(sys.argv[2])
+            position = int(sys.argv[3])
+            move_todo(index, position)
+        except ValueError:
+            print("Indexes must be numbers.")
             sys.exit(1)
     else:
         print("Unknown command.")
