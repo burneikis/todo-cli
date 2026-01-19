@@ -51,6 +51,15 @@ def clear_todos():
     save_todos(todos)
     print("Cleared all todos.")
 
+def swap_todos(x, y):
+        todos = load_todos()
+
+        temp = todos[x]
+        todos[x] = todos[y]
+        todos[y] = temp
+
+        save_todos(todos)
+
 def print_help():
     help_text = """
 Usage:
@@ -93,18 +102,14 @@ def main():
     elif command == "swap":
         if len(sys.argv) < 4:
             print("Please provide two indexes to swap")
-
-        x = int(sys.argv[2]) - 1
-        y = int(sys.argv[3]) - 1
-
-        todos = load_todos()
-
-        temp = todos[x]
-        todos[x] = todos[y]
-        todos[y] = temp
-
-        save_todos(todos)
-
+            sys.exit(1)
+        try:
+            x = int(sys.argv[2]) - 1
+            y = int(sys.argv[3]) - 1
+            swap_todos(x, y)
+        except ValueError:
+            print("Indexes must be numbers.")
+            sys.exit(1)
     else:
         print("Unknown command.")
         print_help()
