@@ -52,6 +52,9 @@ def clear_todos():
     print("Cleared all todos.")
 
 def swap_todos(x, y):
+        x -= 1
+        y -= 1
+
         todos = load_todos()
 
         temp = todos[x]
@@ -60,6 +63,16 @@ def swap_todos(x, y):
 
         save_todos(todos)
 
+def top_todo(index):
+    index -= 1
+
+    todos = load_todos()
+
+    todo = todos.pop(index)
+    todos.insert(0, todo)
+
+    save_todos(todos)
+
 def print_help():
     help_text = """
 Usage:
@@ -67,6 +80,9 @@ Usage:
     todo list                      - List all todos
     todo do INDEX                  - Complete a todo by its index
     todo help                      - Show this help message
+    todo clear                     - Clear all todos
+    todo swap X Y                  - Swap todos at index X and Y
+    todo top INDEX                 - Move todo at INDEX to the top
 """
     print(help_text)
 
@@ -104,11 +120,21 @@ def main():
             print("Please provide two indexes to swap")
             sys.exit(1)
         try:
-            x = int(sys.argv[2]) - 1
-            y = int(sys.argv[3]) - 1
+            x = int(sys.argv[2])
+            y = int(sys.argv[3])
             swap_todos(x, y)
         except ValueError:
             print("Indexes must be numbers.")
+            sys.exit(1)
+    elif command == "top":
+        if len(sys.argv) < 3:
+            print("Please provide the index of the todo to move to the top")
+            sys.exit(1)
+        try:
+            index = int(sys.argv[2])
+            top_todo(index)
+        except ValueError:
+            print("Index must be a number.")
             sys.exit(1)
     else:
         print("Unknown command.")
