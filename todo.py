@@ -22,6 +22,7 @@ def save_todos(todos):
     with open(TODO_FILE, "w") as f:
         for todo in todos:
             f.write(todo + "\n")
+
 def add_todo(todo):
     todos = load_todos()
     todos.append(todo)
@@ -89,6 +90,21 @@ def main():
         print_help()
     elif command == "clear":
         clear_todos()
+    elif command == "swap":
+        if len(sys.argv) < 4:
+            print("Please provide two indexes to swap")
+
+        x = int(sys.argv[2]) - 1
+        y = int(sys.argv[3]) - 1
+
+        todos = load_todos()
+
+        temp = todos[x]
+        todos[x] = todos[y]
+        todos[y] = temp
+
+        save_todos(todos)
+
     else:
         print("Unknown command.")
         print_help()
@@ -96,4 +112,4 @@ def main():
 
 if __name__ == "__main__":
     main()
- 
+
