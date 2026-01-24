@@ -47,6 +47,12 @@ def complete_todo(index):
     print(f"Completed todo: {completed}")
 
 def clear_todos():
+    # Ask for confirmation
+    confirm = input("Are you sure you want to clear all todos? (y/n): ")
+    if confirm.lower() != 'y':
+        print("Clear operation cancelled.")
+        return
+
     todos = []
     save_todos(todos)
     print("Cleared all todos.")
