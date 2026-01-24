@@ -57,6 +57,15 @@ def clear_todos():
     save_todos(todos)
     print("Cleared all todos.")
 
+def edit_todo(index, new_todo):
+    todos = load_todos()
+    if index < 1 or index > len(todos):
+        print("Invalid todo index.")
+        return
+    todos[index - 1] = new_todo
+    save_todos(todos)
+    print(f"Edited todo {index}: {new_todo}")
+
 def swap_todos(x, y):
         x -= 1
         y -= 1
@@ -103,15 +112,16 @@ def move_todo(index, position):
 def print_help():
     help_text = """
 Usage:
-    todo add "description"         - Add a new todo
-    todo list                      - List all todos
-    todo do INDEX                  - Complete a todo by its index
-    todo help                      - Show this help message
-    todo clear                     - Clear all todos
-    todo swap X Y                  - Swap todos at index X and Y
-    todo top INDEX                 - Move todo at INDEX to the top
-    todo bot INDEX                 - Move todo at INDEX to the bottom
-    todo move INDEX POSITION       - Move todo at INDEX to POSITION
+    todo add "description"            - Add a new todo
+    todo list                         - List all todos
+    todo do INDEX                     - Complete a todo by its index
+    todo help                         - Show this help message
+    todo clear                        - Clear all todos
+    todo swap X Y                     - Swap todos at index X and Y
+    todo top INDEX                    - Move todo at INDEX to the top
+    todo bot INDEX                    - Move todo at INDEX to the bottom
+    todo move INDEX POSITION          - Move todo at INDEX to POSITION
+    todo edit INDEX "new description" - Edit the todo at INDEX
 """
     print(help_text)
 
