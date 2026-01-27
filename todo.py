@@ -6,8 +6,9 @@
 
 # we will store a global list of todos in ~/.todo/todos
 
-from pathlib import Path
 import sys
+from pathlib import Path
+
 TODO_FILE = Path.home() / ".todo" / "todos"
 
 def load_todos():
@@ -172,6 +173,17 @@ def main():
         try:
             index = int(sys.argv[2])
             top_todo(index)
+        except ValueError:
+            print("Index must be a number.")
+            sys.exit(1)
+    elif command == "edit":
+        if len(sys.argv) < 4:
+            print("Please provide the index of the todo to edit and the new description")
+            sys.exit(1)
+        try:
+            index = int(sys.argv[2])
+            new_description = " ".join(sys.argv[3:])
+            edit_todo(index, new_description)
         except ValueError:
             print("Index must be a number.")
             sys.exit(1)
