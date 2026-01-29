@@ -11,6 +11,7 @@ from pathlib import Path
 
 TODO_FILE = Path.home() / ".todo" / "todos"
 
+
 def load_todos():
     if not TODO_FILE.exists():
         return []
@@ -18,17 +19,20 @@ def load_todos():
         todos = [line.strip() for line in f.readlines() if line.strip()]
     return todos
 
+
 def save_todos(todos):
     TODO_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(TODO_FILE, "w") as f:
         for todo in todos:
             f.write(todo + "\n")
 
+
 def add_todo(todo):
     todos = load_todos()
     todos.append(todo)
     save_todos(todos)
     print(f"Added todo: {todo}")
+
 
 def list_todos():
     todos = load_todos()
@@ -37,6 +41,7 @@ def list_todos():
         return
     for idx, todo in enumerate(todos, 1):
         print(f"{idx}. {todo}")
+
 
 def complete_todo(index):
     todos = load_todos()
@@ -47,16 +52,18 @@ def complete_todo(index):
     save_todos(todos)
     print(f"Completed todo: {completed}")
 
+
 def clear_todos():
     # Ask for confirmation
     confirm = input("Are you sure you want to clear all todos? (y/n): ")
-    if confirm.lower() != 'y':
+    if confirm.lower() != "y":
         print("Clear operation cancelled.")
         return
 
     todos = []
     save_todos(todos)
     print("Cleared all todos.")
+
 
 def edit_todo(index, new_todo):
     todos = load_todos()
@@ -67,17 +74,19 @@ def edit_todo(index, new_todo):
     save_todos(todos)
     print(f"Edited todo {index}: {new_todo}")
 
+
 def swap_todos(x, y):
-        x -= 1
-        y -= 1
+    x -= 1
+    y -= 1
 
-        todos = load_todos()
+    todos = load_todos()
 
-        temp = todos[x]
-        todos[x] = todos[y]
-        todos[y] = temp
+    temp = todos[x]
+    todos[x] = todos[y]
+    todos[y] = temp
 
-        save_todos(todos)
+    save_todos(todos)
+
 
 def top_todo(index):
     index -= 1
@@ -89,6 +98,7 @@ def top_todo(index):
 
     save_todos(todos)
 
+
 def bottom_todo(index):
     index -= 1
 
@@ -98,6 +108,7 @@ def bottom_todo(index):
     todos.append(todo)
 
     save_todos(todos)
+
 
 def move_todo(index, position):
     index -= 1
@@ -110,12 +121,28 @@ def move_todo(index, position):
 
     save_todos(todos)
 
+
+def complete_todos(indexes):
+    todos = load_todos()
+    indexes = sorted(set(indexes), reverse=True)
+
+    for index in indexes:
+        if index < 1 or index > len(todos):
+            print(f"Invalid todo index: {index}")
+            continue
+        completed = todos.pop(index - 1)
+        print(f"Completed todo: {completed}")
+
+    save_todos(todos)
+
+
 def print_help():
     help_text = """
 Usage:
     todo add "description"            - Add a new todo
     todo list                         - List all todos
     todo do INDEX                     - Complete a todo by its index
+    todo do INDEX1 INDEX2 ...         - Complete multiple todos by their indexes
     todo help                         - Show this help message
     todo clear                        - Clear all todos
     todo swap X Y                     - Swap todos at index X and Y
@@ -125,6 +152,7 @@ Usage:
     todo edit INDEX "new description" - Edit the todo at INDEX
 """
     print(help_text)
+
 
 def main():
     if len(sys.argv) < 2:
@@ -145,6 +173,14 @@ def main():
         if len(sys.argv) < 3:
             print("Please provide the index of the todo to complete.")
             sys.exit(1)
+        if len(sys.argv) > 3:
+            try:
+                indexes = [int(i) for i in sys.argv[2:]]
+                complete_todos(indexes)
+            except ValueError:
+                print("Indexes must be numbers.")
+                sys.exit(1)
+            return
         try:
             index = int(sys.argv[2])
             complete_todo(index)
@@ -178,7 +214,9 @@ def main():
             sys.exit(1)
     elif command == "edit":
         if len(sys.argv) < 4:
-            print("Please provide the index of the todo to edit and the new description")
+            print(
+                "Please provide the index of the todo to edit and the new description"
+            )
             sys.exit(1)
         try:
             index = int(sys.argv[2])
@@ -213,6 +251,6 @@ def main():
         print_help()
         sys.exit(1)
 
+
 if __name__ == "__main__":
     main()
-
